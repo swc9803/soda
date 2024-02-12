@@ -1,17 +1,17 @@
 <template>
-  <div class="container">
+  <div class="model_container">
     <div ref="canvasRef" class="wrapper" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps, watch } from "vue";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 // import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js"; 동적환경맵?
 import gsap from "gsap";
 
-const canvasRef = ref();
+const canvasRef = ref(null);
 let camera;
 let can;
 
@@ -35,30 +35,31 @@ gltfLoader.load("/can.glb", (gltf) => {
   const center = new THREE.Vector3();
   box.getCenter(center);
   can.position.sub(center);
-  can.scale.set(0.8, 0.8, 0.8);
 
   scene.add(can);
 });
 
-setTimeout(() => {
-  can.traverse((node) => {
-    if (node instanceof THREE.Mesh) {
-      if (node.name === "model") {
-        const randomColor = {
-          r: Math.random(),
-          g: Math.random(),
-          b: Math.random(),
-        };
-        gsap.to(node.material.color, {
-          r: randomColor.r,
-          g: randomColor.g,
-          b: randomColor.b,
-          duration: 1.5,
-        });
+const props = defineProps({
+  selectedColor: String,
+});
+
+watch(
+  () => props.selectedColor,
+  () => {
+    can.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        if (node.name === "model") {
+          gsap.to(node.material.color, {
+            r: new THREE.Color(props.selectedColor).r,
+            g: new THREE.Color(props.selectedColor).g,
+            b: new THREE.Color(props.selectedColor).b,
+            duration: 1.5,
+          });
+        }
       }
-    }
-  });
-}, 1000);
+    });
+  }
+);
 
 // light
 const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -79,9 +80,11 @@ const animate = () => {
 };
 
 const onResize = () => {
-  camera.aspect = canvasRef.value.offsetWidth / canvasRef.value.offsetHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(canvasRef.value.offsetWidth, canvasRef.value.offsetHeight);
+  if (canvasRef.value) {
+    camera.aspect = canvasRef.value.offsetWidth / canvasRef.value.offsetHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvasRef.value.offsetWidth, canvasRef.value.offsetHeight);
+  }
 };
 
 onMounted(() => {
@@ -102,10 +105,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.model_container {
   position: fixed;
   width: 100%;
   height: 100vh;
+  pointer-events: none;
   .wrapper {
     position: absolute;
     width: 100%;
