@@ -13,20 +13,28 @@
 </template>
 
 <script setup>
-// lang="ts"
-import { defineEmits } from "vue";
+import { ref, defineEmits } from "vue";
 
 const flavor = [
-  { name: "Grape", color: "#6F2DA8" },
+  { name: "Grape", color: "#4EBC38" },
   { name: "Peach", color: "#FFE5B4" },
   { name: "Orange", color: "#FFA500" },
   { name: "Strawberry", color: "#FC5A8D" },
   { name: "Lime", color: "#BFFF00" },
 ];
 
+const currentColor = ref("#4EBC38");
+const preventClick = ref(false);
 const emit = defineEmits(["changeColor"]);
 const selectColor = (color) => {
-  emit("changeColor", color);
+  if (!preventClick.value && currentColor.value !== color) {
+    preventClick.value = true;
+    currentColor.value = color;
+    emit("changeColor", color);
+    setTimeout(() => {
+      preventClick.value = false;
+    }, 1750);
+  }
 };
 </script>
 

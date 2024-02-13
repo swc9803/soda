@@ -2,6 +2,7 @@
   <div class="container">
     <Model :selectedColor="selectedColor" />
     <Switch @changeColor="changeColor" />
+    <!-- lenis -->
   </div>
 </template>
 
@@ -10,7 +11,7 @@ import { ref } from "vue";
 import Model from "@/components/Model.vue";
 import Switch from "@/components/Switch.vue";
 
-const selectedColor = ref("6F2DA8");
+const selectedColor = ref("#4EBC38");
 
 const changeColor = (color) => {
   selectedColor.value = color;

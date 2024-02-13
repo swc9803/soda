@@ -53,10 +53,14 @@ watch(
             r: new THREE.Color(props.selectedColor).r,
             g: new THREE.Color(props.selectedColor).g,
             b: new THREE.Color(props.selectedColor).b,
-            duration: 1.5,
+            duration: 0.75,
           });
         }
       }
+    });
+    gsap.to(can.rotation, {
+      y: `+=${Math.PI * 2}`,
+      duration: 0.75,
     });
   }
 );
