@@ -15,8 +15,13 @@ const canvasRef = ref(null);
 let camera;
 let can;
 
+const canAnimationTl = gsap.timeline();
+
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+const group = new THREE.Group();
+scene.add(group);
 const gltfLoader = new GLTFLoader();
 
 gltfLoader.load("/can.glb", (gltf) => {
@@ -29,7 +34,7 @@ gltfLoader.load("/can.glb", (gltf) => {
     }
   });
 
-  //   can.rotation.set(-Math.PI / 2, 0, 0);
+  can.rotation.set(-Math.PI * 0.05, 0, 0.3);
 
   const box = new THREE.Box3().setFromObject(can);
   const center = new THREE.Vector3();
@@ -37,6 +42,25 @@ gltfLoader.load("/can.glb", (gltf) => {
   can.position.sub(center);
 
   scene.add(can);
+  group.add(can);
+
+  canAnimationTl.to(group.rotation, {
+    y: `+=${Math.PI * 2}`,
+    duration: 10,
+    ease: "none",
+    repeat: -1,
+  });
+  canAnimationTl.to(
+    group.rotation,
+    {
+      z: -0.3,
+      duration: 5,
+      ease: "none",
+      repeat: -1,
+      yoyo: true,
+    },
+    "<"
+  );
 });
 
 const props = defineProps({
