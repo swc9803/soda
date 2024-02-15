@@ -44,6 +44,14 @@ gltfLoader.load("/can.glb", (gltf) => {
   scene.add(can);
   group.add(can);
 
+  canAnimationTl.from(group.scale, {
+    x: 2,
+    y: 2,
+    z: 2,
+    duration: 2,
+    ease: "power2",
+    delay: 0.5,
+  });
   canAnimationTl.to(group.rotation, {
     y: `+=${Math.PI * 2}`,
     duration: 10,
