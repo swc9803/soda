@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Model :selectedColor="selectedColor" />
-    <Switch @changeColor="changeColor" />
+    <Interface @changeColor="changeColor" />
     <!-- lenis -->
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script setup>
 import { ref } from "vue";
 import Model from "@/components/Model.vue";
-import Switch from "@/components/Switch.vue";
+import Interface from "@/components/Interface.vue";
 
 const selectedColor = ref("#4EBC38");
 
