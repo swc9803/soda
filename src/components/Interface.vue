@@ -14,9 +14,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, defineEmits } from "vue";
 import gsap from "gsap";
+
+
+interface Flavor {
+  name: string;
+  color: string;
+}
 
 const flavor = [
   { name: "Grape", color: "#4EBC38" },
@@ -70,8 +76,10 @@ const selectFlavor = (color, name) => {
     color: white;
     font-size: 4em;
     font-weight: 600;
-    -webkit-text-stroke: 2px rgb(29, 29, 29);
     z-index: 1;
+    @media (max-width: 720px) {
+      font-size: 2.5em;
+    }
   }
   .switch_wrapper {
     position: absolute;
@@ -80,7 +88,10 @@ const selectFlavor = (color, name) => {
     transform: translate3d(-50%, -50%, 0);
     display: flex;
     justify-content: space-between;
-    width: 60%;
+    gap: 20px;
+    button {
+      padding: 10px;
+    }
   }
 }
 </style>
